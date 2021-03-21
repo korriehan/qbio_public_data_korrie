@@ -4,12 +4,16 @@ if (!require(TCGAbiolinks)) BiocManager::install("TCGAbiolinks")
 #What line of code needs to be added before using TCGAbiolinks?
 library(TCGAbiolinks)
 
+barcodes_clinic <- c("TCGA-BH-A0DG","TCGA-A2-A0YF","TCGA-AN-A04A","TCGA-AR-A1AP", "TCGA-A2-A0T3",
+                     "TCGA-E2-A154", "TCGA-AO-A12F", "TCGA-A2-A0YM", "TCGA-BH-A0E0", "TCGA-AN-A0FL")
+
 install.packages("survival")
 install.packages("survminer")
 install.packages("arsenal")
 library(survival)
 library(survminer)
 library(arsenal)
+
 clin_query <- GDCquery(project = "TCGA-BRCA", data.category="Clinical", file.type="xml")
 GDCdownload( clin_query )
 clinic <- GDCprepare_clinic(clin_query, clinical.info="patient")
