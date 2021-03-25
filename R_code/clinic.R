@@ -47,27 +47,35 @@ library(maftools)
 # after running ^^, navigate to the saved csv file. Open the csv file with below Code
 # only need to query once. For repeating code, you can just read in the saved dataframe you created
 
-clinic$Overall_Survival_Status <- 1
+#assigns 1 to each value
+clinic$Overall_Survival_Status <- 1 
+
+#assigns 0 when vital status is not equal to "Dead"
 clinic$Overall_Survival_Status[which(clinic$vital_status != "Dead")] <- 0
 clinic$time <- clinic$days_to_death
+
+#when days_to_death is NA, that value in the time column is replaced by the corresponding value in days_to_last_follow_up
 clinic$time[is.na(clinic$days_to_death)] <- clinic$days_to_last_follow_up[is.na(clinic$days_to_death)]
 colnames(clinic)[1] <- "Tumor_Sample_Barcode"
 
+#reads in as csv
 my_maf <- data.table::fread("GDCdata/TCGA.BRCA.mutect.995c0111-d90b-4140-bee7-3845436c3b42.DR-10.0.somatic.maf.csv")
 
+#reads in as maf
 maf <- read.maf(maf = my_maf, clinicalData = clinic, isTCGA = TRUE)
 
 pdf("mafSurvival.pdf")
 
-prog_geneset = survGroup(maf = maf, top = 20, geneSetSize = 2, time = "time", Status = "Overall_Survival_Status", verbose = FALSE)
-print(prog_geneset)
 
+#survival probability over time for geneset, mutant vs. wild type
 mafSurvGroup(maf = maf, geneSet = c("TP53", "PIK3CA"), time = "time", Status = "Overall_Survival_Status")
 
 mafSurvGroup(maf = maf, geneSet = c("TP53", "MUC16"), time = "time", Status = "Overall_Survival_Status")
 
 mafSurvGroup(maf = maf, geneSet = c("MUC16", "PIK3CA"), time = "time", Status = "Overall_Survival_Status")
 
+
+#survival probability over time for gene, mutant vs. wild type
 mafSurvival(maf = maf, genes = 'TP53', time = 'time', Status = 'Overall_Survival_Status', isTCGA = TRUE)
 
 mafSurvival(maf = maf, genes = 'PIK3CA', time = 'time', Status = 'Overall_Survival_Status', isTCGA = TRUE)
