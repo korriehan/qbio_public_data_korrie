@@ -17,14 +17,14 @@ query <- GDCquery(project = "TCGA-BRCA",
                   data.type = "Gene Expression Quantification",
                   workflow.type = "HTSeq - Counts")
 # barcode = barcodes_rnaseq
-# GDCdownload(query)
+GDCdownload(query)
 sum_exp <- GDCprepare(query)
 patient_data <- colData(sum_exp)
 
 # Accessing Clinical data
 clin_query <- GDCquery(project = "TCGA-BRCA", data.category="Clinical", file.type = "xml")
 # barcode=barcodes_clinic
-# GDCdownload( clin_query ) #only need this command once. This downloads the files onto your system.
+GDCdownload( clin_query ) #only need this command once. This downloads the files onto your system.
 clinic <- GDCprepare_clinic(clin_query, clinical.info="patient")
 names(clinic)[names(clinic) == "days_to_last_followup"] = "days_to_last_follow_up"
 
@@ -39,9 +39,9 @@ row_order <- match(colnames(htseq_counts), clinic$bcr_patient_barcode)
 clinic_ordered  <- clinic[row_order, ]
 
 # # Get rid of nonmatching samples in clinical and htseq
-# matching <- which(clinic_ordered$bcr_patient_barcode %in% colnames(htseq_counts))
+matching <- which(clinic_ordered$bcr_patient_barcode %in% colnames(htseq_counts))
 # # which function basically only takes the values of clinic_ordered$bcr_patient_barcode that are also found in the colnames of htseq
-# clinic_matched <- clinic_ordered[matching,]
+clinic_matched <- clinic_ordered[matching,]
 
 # Adding age to clinical data
 age_clinical = clinic$age_at_initial_pathologic_diagnosis
