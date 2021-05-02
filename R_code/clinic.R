@@ -82,4 +82,6 @@ mafSurvival(maf = maf, genes = 'PIK3CA', time = 'time', Status = 'Overall_Surviv
 
 mafSurvival(maf = maf, genes = 'MUC16', time = 'time', Status = 'Overall_Survival_Status', isTCGA = TRUE)
 
+mafSurvival(maf = maf, genes = 'ESR1', time = 'time', Status = 'Overall_Survival_Status', isTCGA = TRUE)
+
 dev.off()
